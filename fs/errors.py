@@ -152,7 +152,7 @@ class ResourceError(FSError):
     """Base exception class for error associated with a specific resource."""
     default_message = "Unspecified resource error %(path)s [%(details)s]"
 
-    def __init__(self, path="", details=None ** kwds):
+    def __init__(self, path="", details=None, **kwds):
         self.path = path
         self.details = details
         self.opname = kwds.pop("opname", None)

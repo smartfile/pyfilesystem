@@ -688,7 +688,7 @@ class StringIO(FileWrapper):
     def __init__(self,data=None,mode=None):
         wrapped_file = _StringIO()
         if data is not None:
-            wrapped_file.write(data)
+            wrapped_file.write(data.encode('utf-8'))
             wrapped_file.seek(0)
         super(StringIO,self).__init__(wrapped_file,mode)
 

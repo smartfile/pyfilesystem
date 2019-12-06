@@ -59,7 +59,7 @@ DEFAULT_HOST_KEY = paramiko.RSAKey.from_private_key(StringIO(
     "QBfGeFt1VGAy+YTLYLzTfnGnoFQcv7+2i9ZXnn/Gs9N8M+/lekdBFYgzoKN0y4pG\n" \
     "2+Q+Tlr2aNlAmrHtkT13+wJAJVgZATPI5X3UO0Wdf24f/w9+OY+QxKGl86tTQXzE\n" \
     "4bwvYtUGufMIHiNeWP66i6fYCucXCMYtx6Xgu2hpdZZpFw==\n" \
-    "-----END RSA PRIVATE KEY-----\n".encode('utf-8')
+    "-----END RSA PRIVATE KEY-----\n"
 ))
 
 

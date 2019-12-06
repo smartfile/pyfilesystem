@@ -54,7 +54,7 @@ systems with Dokan installed.
 #  Copyright (c) 2009-2010, Cloud Matrix Pty. Ltd.
 #  All rights reserved; available under the terms of the MIT License.
 
-from __future__ import with_statement
+
 
 import sys
 
@@ -64,7 +64,7 @@ import errno
 import time
 import stat as statinfo
 import subprocess
-import cPickle
+import pickle
 import datetime
 import ctypes
 from collections import deque
@@ -76,7 +76,7 @@ from fs.local_functools import wraps
 from fs.wrapfs import WrapFS
 
 try:
-    import libdokan
+    from . import libdokan
 except (NotImplementedError, EnvironmentError, ImportError, NameError,):
     is_available = False
     sys.modules.pop("fs.expose.dokan.libdokan", None)
@@ -171,12 +171,12 @@ def handle_fs_errors(func):
     def wrapper(*args,**kwds):
         try:
             res = func(*args,**kwds)
-        except OSError, e:
+        except OSError as e:
             if e.errno:
                 res = -1 * _errno2syserrcode(e.errno)
             else:
                 res = -1
-        except Exception, e:
+        except Exception as e:
             raise
         else:
             if res is None:
@@ -424,7 +424,7 @@ class FSOperations(object):
         info.contents.Context = 1
         try:
             f = self.fs.open(path, mode)
-            print path, mode, repr(f)
+            print(path, mode, repr(f))
         except ResourceInvalidError:
             info.contents.IsDirectory = True
         except FSError:
@@ -896,10 +896,10 @@ def mount(fs, drive, foreground=False, ready_callback=None, unmount_callback=Non
     def check_ready(mp=None):
         if ready_callback is not False:
             check_alive(mp)
-            for _ in xrange(100):
+            for _ in range(100):
                 try:
                     os.stat(drive+":\\")
-                except EnvironmentError, e:
+                except EnvironmentError as e:
                     check_alive(mp)
                     time.sleep(0.05)
                 else:
@@ -989,7 +989,7 @@ class MountProcess(subprocess.Popen):
         cmd = cmd + "data = cPickle.loads(%s); "
         cmd = cmd + "from fs.expose.dokan import MountProcess; "
         cmd = cmd + "MountProcess._do_mount(data)"
-        cmd = cmd % (repr(cPickle.dumps((fs,drive,dokan_opts,nowait),-1)),)
+        cmd = cmd % (repr(pickle.dumps((fs,drive,dokan_opts,nowait),-1)),)
         cmd = [sys.executable,"-c",cmd]
         super(MountProcess,self).__init__(cmd,**kwds)
 

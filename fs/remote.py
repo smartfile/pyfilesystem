@@ -20,7 +20,7 @@ FS subclasses interfacing with a remote filesystem.  These include:
 
 """
 
-from __future__ import with_statement
+
 
 import time
 import stat as statinfo
@@ -424,11 +424,11 @@ class CachedInfo(object):
         self.has_full_children = other.has_full_children
     @classmethod
     def new_file_stub(cls):
-        info = {"info" : 0700 | statinfo.S_IFREG}
+        info = {"info" : 0o700 | statinfo.S_IFREG}
         return cls(info,has_full_info=False)
     @classmethod
     def new_dir_stub(cls):
-        info = {"info" : 0700 | statinfo.S_IFDIR}
+        info = {"info" : 0o700 | statinfo.S_IFDIR}
         return cls(info,has_full_info=False)
 
 
@@ -514,7 +514,7 @@ class CacheFSMixin(FS):
             if self.max_cache_size is not None and old_ci is None:
                 while self.__cache_size >= self.max_cache_size:
                     try:
-                        to_del = iter(self.__cache).next()
+                        to_del = next(iter(self.__cache))
                     except StopIteration:
                         break
                     else:
@@ -594,7 +594,7 @@ class CacheFSMixin(FS):
 
     def isdir(self, path):
         try:
-            self.__cache.iternames(path).next()
+            next(self.__cache.iternames(path))
             return True
         except StopIteration:
             pass
@@ -609,7 +609,7 @@ class CacheFSMixin(FS):
 
     def isfile(self, path):
         try:
-            self.__cache.iternames(path).next()
+            next(self.__cache.iternames(path))
             return False
         except StopIteration:
             pass

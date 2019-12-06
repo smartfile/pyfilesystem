@@ -383,7 +383,7 @@ def isfile(fs,path,info=None):
 def contains_files(fs, path='/'):
     """Check if there are any files in the filesystem"""
     try:
-        iter(fs.walkfiles(path)).next()
+        next(iter(fs.walkfiles(path)))
     except StopIteration:
         return False
     return True
@@ -425,7 +425,7 @@ def find_duplicates(fs,
     for path in compare_paths:
         file_sizes[fs.getsize(path)].append(path)
 
-    size_duplicates = [paths for paths in file_sizes.itervalues() if len(paths) > 1]
+    size_duplicates = [paths for paths in file_sizes.values() if len(paths) > 1]
 
     signatures = defaultdict(list)
 
@@ -452,7 +452,7 @@ def find_duplicates(fs,
     # If 'quick' is True then the signature comparison is adequate (although
     # it may result in false positives)
     if quick:
-        for paths in signatures.itervalues():
+        for paths in signatures.values():
             if len(paths) > 1:
                 yield paths
         return
@@ -481,7 +481,7 @@ def find_duplicates(fs,
     # byte by byte.
     # All path groups in this loop have the same size and same signature, so are
     # highly likely to be identical.
-    for paths in signatures.itervalues():
+    for paths in signatures.values():
 
         while len(paths) > 1:
 
@@ -571,10 +571,10 @@ def print_fs(fs,
     filecount = [0]
     def print_dir(fs, path, levels=[]):
         if file_encoding == 'UTF-8' and terminal_colors:
-            char_vertline = u'│'
-            char_newnode = u'├'
-            char_line = u'──'
-            char_corner = u'╰'
+            char_vertline = '│'
+            char_newnode = '├'
+            char_line = '──'
+            char_corner = '╰'
         else:
             char_vertline = '|'
             char_newnode = '|'
@@ -589,7 +589,7 @@ def print_fs(fs,
                 files = fs.listdir(path, files_only=True, wildcard=files_wildcard)
             dir_listing = ( [(True, p) for p in dirs] +
                             [(False, p) for p in files] )
-        except Exception, e:
+        except Exception as e:
             prefix = ''.join([(char_vertline + '   ', '    ')[last] for last in levels]) + '   '
             write(wrap_prefix(prefix[:-1] + '    ') + wrap_error("unable to retrieve directory list (%s) ..." % str(e)))
             return 0
@@ -598,9 +598,9 @@ def print_fs(fs,
             dir_listing = [(isdir, p) for isdir, p in dir_listing if not p.startswith('.')]
 
         if dirs_first:
-            dir_listing.sort(key = lambda (isdir, p):(not isdir, p.lower()))
+            dir_listing.sort(key = lambda isdir_p:(not isdir_p[0], isdir_p[1].lower()))
         else:
-            dir_listing.sort(key = lambda (isdir, p):p.lower())
+            dir_listing.sort(key = lambda isdir_p1:isdir_p1[1].lower())
 
         for i, (is_dir, item) in enumerate(dir_listing):
             if is_dir:
@@ -681,10 +681,10 @@ if __name__ == "__main__":
     t1.tree()
 
     t2 = TempFS()
-    print t2.listdir()
+    print(t2.listdir())
     movedir(t1, t2)
 
-    print t2.listdir()
+    print(t2.listdir())
     t1.tree()
     t2.tree()
 

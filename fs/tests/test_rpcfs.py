@@ -49,7 +49,7 @@ class TestRPCFS(unittest.TestCase, FSTestCases, ThreadingTestCases):
         while not self.server:
             try:
                 self.server = self.makeServer(self.temp_fs,("127.0.0.1",port))
-            except socket.error, e:
+            except socket.error as e:
                 if e.args[1] == "Address already in use":
                     port += 1
                 else:
@@ -64,7 +64,7 @@ class TestRPCFS(unittest.TestCase, FSTestCases, ThreadingTestCases):
             #self.server.serve_forever()
             while self.serve_more_requests:
                 self.server.handle_request()
-        except Exception, e:
+        except Exception as e:
             pass
 
         self.end_event.set()
@@ -94,7 +94,7 @@ class TestRPCFS(unittest.TestCase, FSTestCases, ThreadingTestCases):
                 sock.settimeout(.1)
                 sock.connect(sa)
                 sock.send(b("\n"))
-            except socket.error, e:
+            except socket.error as e:
                 pass
             finally:
                 if sock is not None:

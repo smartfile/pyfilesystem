@@ -51,7 +51,7 @@ def decode_args(f):
     def wrapper(self, *args):
         encoded = []
         for arg in args:
-            if isinstance(arg, str):
+            if not isinstance(arg, str):
                 arg = arg.decode(self.encoding)
             encoded.append(arg)
         return f(self, *encoded)

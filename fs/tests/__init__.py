@@ -159,7 +159,7 @@ class FSTestCases(object):
         self.fs.setcontents("hello", b("world"))
         self.assertEqual(self.fs.getcontents("hello", "rb"), b("world"))
         #  ...and a file-like object
-        self.fs.setcontents("hello", StringIO(b("to you, good sir!")))
+        self.fs.setcontents("hello", StringIO("to you, good sir!"))
         self.assertEqual(self.fs.getcontents(
             "hello", "rb"), b("to you, good sir!"))
         #  setcontents() should accept both a string...
@@ -167,7 +167,7 @@ class FSTestCases(object):
         self.assertEqual(self.fs.getcontents("hello", "rb"), b("world"))
         #  ...and a file-like object
         self.fs.setcontents("hello", StringIO(
-            b("to you, good sir!")), chunk_size=2)
+            "to you, good sir!"), chunk_size=2)
         self.assertEqual(self.fs.getcontents(
             "hello", "rb"), b("to you, good sir!"))
         self.fs.setcontents("hello", b(""))
@@ -179,13 +179,13 @@ class FSTestCases(object):
         self.assertEqual(self.fs.getcontents("hello", "rb"), b("world"))
         #  ...and a file-like object
         self.fs.setcontents_async("hello", StringIO(
-            b("to you, good sir!"))).wait()
+            "to you, good sir!")).wait()
         self.assertEqual(self.fs.getcontents("hello"), b("to you, good sir!"))
         self.fs.setcontents_async("hello", b("world"), chunk_size=2).wait()
         self.assertEqual(self.fs.getcontents("hello", "rb"), b("world"))
         #  ...and a file-like object
         self.fs.setcontents_async("hello", StringIO(
-            b("to you, good sir!")), chunk_size=2).wait()
+            "to you, good sir!"), chunk_size=2).wait()
         self.assertEqual(self.fs.getcontents(
             "hello", "rb"), b("to you, good sir!"))
 

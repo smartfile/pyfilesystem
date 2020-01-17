@@ -44,7 +44,7 @@ from fs.utils import isdir
 
 # Default host key used by BaseSFTPServer
 #
-DEFAULT_HOST_KEY = paramiko.RSAKey.from_private_key(StringIO(
+DEFAULT_HOST_KEY = StringIO(
     "-----BEGIN RSA PRIVATE KEY-----\n" \
     "MIICXgIBAAKCAIEAl7sAF0x2O/HwLhG68b1uG8KHSOTqe3Cdlj5i/1RhO7E2BJ4B\n" \
     "3jhKYDYtupRnMFbpu7fb21A24w3Y3W5gXzywBxR6dP2HgiSDVecoDg2uSYPjnlDk\n" \
@@ -60,7 +60,7 @@ DEFAULT_HOST_KEY = paramiko.RSAKey.from_private_key(StringIO(
     "2+Q+Tlr2aNlAmrHtkT13+wJAJVgZATPI5X3UO0Wdf24f/w9+OY+QxKGl86tTQXzE\n" \
     "4bwvYtUGufMIHiNeWP66i6fYCucXCMYtx6Xgu2hpdZZpFw==\n" \
     "-----END RSA PRIVATE KEY-----\n"
-))
+)
 
 
 def report_sftp_errors(func):
@@ -332,7 +332,7 @@ class BaseSFTPServer(ThreadedTCPServer):
         self.fs = fs
         self.encoding = encoding
         if host_key is None:
-            host_key = DEFAULT_HOST_KEY
+            host_key = paramiko.RSAKey.from_private_key(DEFAULT_HOST_KEY)
         self.host_key = host_key
         if RequestHandlerClass is None:
             RequestHandlerClass = SFTPRequestHandler
